@@ -225,6 +225,27 @@ M.select_header = function()
   goto_header(line)
 end
 
+local function goto_preview_header(index)
+  -- Switch to the previous window.
+  vim.cmd([[execute "normal! \<C-W>\<C-P>"]])
+
+  -- Go to the line of the selected header.
+  vim.api.nvim_win_set_cursor(0, { headers[index].line + 1, 0 })
+
+  -- Switch back to the header window.
+  vim.cmd([[execute "normal! \<C-W>\<C-P>"]])
+end
+
+-- Navigate to a header without closing the header window.
+M.preview_header = function()
+  -- Get the current line.
+  local line = vim.api.nvim_win_get_cursor(0)[1]
+
+  -- Go to the selected header.
+  goto_preview_header(line)
+end
+
+
 M.close_header_window = function()
   -- Get the current window.
   local win = vim.api.nvim_get_current_win()
@@ -264,6 +285,8 @@ M.markdown_headers = function(start_on_closest)
   vim.api.nvim_buf_set_keymap(0, 'n', 'q', ':lua require("md-headers").close_header_window()<CR>',
     { noremap = true, silent = true })
   vim.api.nvim_buf_set_keymap(0, 'n', '<Esc>', ':lua require("md-headers").close_header_window()<CR>',
+    { noremap = true, silent = true })
+  vim.api.nvim_buf_set_keymap(0, 'n', 'p', ':lua require("md-headers").preview_header()<CR>',
     { noremap = true, silent = true })
 end
 
