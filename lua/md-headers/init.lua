@@ -22,14 +22,22 @@ local md_query = vim.treesitter.query.parse(
 ]]
 )
 
-local html_headings = vim.treesitter.query.parse(
-  "html",
+local success, result_or_error = pcall(vim.treesitter.query.parse, "html",
   [[
 (start_tag
     (tag_name) @name (#match? @name "^h[1-9]")
 )
 ]]
 )
+
+local html_headings
+if success then
+  html_headings = result_or_error
+else
+  print("WARNING: Please run ':TSInstall html' to install the Tree-sitter HTML parser for full functionality.")
+  -- handle the error as appropriate for your program
+end
+
 
 local sort_by_line = function(t)
   table.sort(t, function(a, b) return a.line < b.line end)
@@ -183,7 +191,16 @@ local function open_header_window(closest_header)
   vim.api.nvim_set_current_buf(buffer)
 
   -- Set the cursor to the closest header.
-  vim.api.nvim_win_set_cursor(window.win_id, { closest_header, 0 })
+  -- vim.api.nvim_win_set_cursor(window.win_id, { closest_header, 0 })
+  while true do
+    local success, err = pcall(vim.api.nvim_win_set_cursor, window.win_id, { closest_header, 0 })
+    if success then
+      break
+    else
+      -- print("Error setting cursor: " .. err)
+      closest_header = closest_header - 1
+    end
+  end
 end
 
 -- Close the buffer with the headers and navigate to the selected header.
