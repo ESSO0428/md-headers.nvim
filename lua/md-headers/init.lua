@@ -288,6 +288,8 @@ M.markdown_headers = function(start_on_closest)
     { noremap = true, silent = true })
   vim.api.nvim_buf_set_keymap(0, 'n', 'p', ':lua require("md-headers").preview_header()<CR>',
     { noremap = true, silent = true })
+  vim.api.nvim_buf_set_keymap(0, 'n', '<tab>', ':lua require("md-headers").preview_header()<CR>',
+    { noremap = true, silent = true })
 end
 
 -- Set the settings, if any where passed.
