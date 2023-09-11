@@ -149,6 +149,11 @@ end
 -- The buffer itself is not modifiable.
 -- @param closest_header: Line number of the closest header inside the popup window.
 local function open_header_window(closest_header)
+  -- If closest_header is less than or equal to 0, return without opening the window
+  if closest_header <= 0 then
+    return false
+  end
+
   -- Create a new buffer.
   local buffer = vim.api.nvim_create_buf(false, true)
 
@@ -201,6 +206,7 @@ local function open_header_window(closest_header)
       closest_header = closest_header - 1
     end
   end
+  return true
 end
 
 -- Close the buffer with the headers and navigate to the selected header.
@@ -271,7 +277,11 @@ M.markdown_headers = function(start_on_closest)
   end
 
   -- Open the header window.
-  open_header_window(closest_header)
+  local have_header_can_open_window = open_header_window(closest_header)
+  if not have_header_can_open_window then
+    print("No headers found")
+    return
+  end
 
   -- Set the window settings.
   vim.api.nvim_win_set_option(0, "number", false)
