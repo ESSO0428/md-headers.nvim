@@ -49,7 +49,7 @@ Your contributions are always welcome and appreciated 😀!
 
 ```lua
 use {
-    'AntonVanAssche/md-headers.nvim',
+    'ESSO0428/md-headers.nvim',
     requires = {
         'nvim-lua/plenary.nvim'
     }
@@ -65,7 +65,7 @@ use {
 
 ```vim
 Plug 'nvim-lua/plenary.nvim'
-Plug 'AntonVanAssche/md-headers.nvim'
+Plug 'ESSO0428/md-headers.nvim'
 ```
 
 2. Run `:PlugInstall` to install the plugin on your machine.
